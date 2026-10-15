@@ -26,7 +26,13 @@ Personal notes and runnable Python examples for learning neural network fundamen
 | [examples/neuron.py](examples/neuron.py) | Pure Python weighted sum, bias, and sigmoid |
 | [examples/loss.py](examples/loss.py) | Pure Python loss calculations |
 
-Run the examples with Python 3:
+Use Python 3.10+ and install the only third-party dependency before running the examples:
+
+~~~bash
+python -m pip install -r requirements.txt
+~~~
+
+Then run:
 
 ```bash
 python examples/neuron.py
