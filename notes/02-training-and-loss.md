@@ -78,7 +78,7 @@ An update does **not guarantee** that every individual prediction will improve. 
 
 The scalar squared-error examples above predict a **number** such as 80 or 10. Digit recognition typically uses **10 outputs**, one for each digit. A classification loss such as **cross-entropy** is common for that task.
 
-We have **not** studied cross-entropy, gradient descent, or backpropagation yet. Those are upcoming topics, not prerequisites for understanding the basic example here.
+We have **not** studied cross-entropy or backpropagation yet. The direction and update formula of gradient descent were introduced on 15 October 2026, but gradient descent has **not** been coded. Those topics are not prerequisites for understanding this basic loss example.
 
 ## Check yourself
 
@@ -102,7 +102,7 @@ What is the loss? **16**.
 
 ## Next
 
-Learn how the network can update its parameters using **gradient descent**, then study **backpropagation**. Do not mistake understanding the training loop for having implemented those methods.
+Next, **implement gradient descent** to update model parameters, then study **backpropagation**. The current checkpoint and practiced calculus are in [lesson 05](05-linear-regression-loss-and-gradients.md). Do not mistake understanding the training loop for having implemented those methods.
 
 ## 6. New checkpoint: NumPy MSE and linear prediction (15 October 2026)
 
