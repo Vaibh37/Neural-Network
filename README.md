@@ -22,6 +22,7 @@ Personal notes and runnable Python examples for learning neural network fundamen
 | [CHEATSHEET.md](CHEATSHEET.md) | Fast formula and terminology reference |
 | [examples/hidden_layer_numpy.py](examples/hidden_layer_numpy.py) | Executable NumPy forward pass with assertions |
 | [assets/hidden-layer-forward-pass.svg](assets/hidden-layer-forward-pass.svg) | Scalable diagram of calculations inside a hidden layer |
+| [assets/hidden-layer-forward-pass.png](assets/hidden-layer-forward-pass.png) | PNG export of the forward-pass diagram |
 | [examples/neuron.py](examples/neuron.py) | Pure Python weighted sum, bias, and sigmoid |
 | [examples/loss.py](examples/loss.py) | Pure Python loss calculations |
 

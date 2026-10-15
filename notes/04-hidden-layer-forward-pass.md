@@ -18,6 +18,8 @@ The multiplication, bias addition, and activation are *operations* of the layer.
 
 ![Complete hidden-layer forward pass](../assets/hidden-layer-forward-pass.svg)
 
+[PNG export of this diagram](../assets/hidden-layer-forward-pass.png) · [Editable SVG](../assets/hidden-layer-forward-pass.svg)
+
 ## Worked example: two inputs and two hidden neurons
 
 $$
