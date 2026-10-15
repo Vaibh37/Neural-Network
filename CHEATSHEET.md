@@ -68,3 +68,17 @@ Output shape: **(3,1)**. See [step-by-step lesson](notes/04-hidden-layer-forward
 ## What we have *not* implemented
 
 Backpropagation, gradient calculations, optimizer updates, training loops, evaluation, or a trained digit classifier. A successful forward pass is **not** training.
+
+## MSE and linear prediction — practiced 15 October 2026
+
+- Prediction for one feature: `y_pred = w * x + b` (elementwise for a NumPy array of samples).
+- Squared error: `(y_pred - y_true) ** 2` (one error per sample).
+- Mean squared error: `np.mean((y_pred - y_true) ** 2)` (one scalar average).
+- MSE of **0** means perfect predictions on the evaluated examples; unlike accuracy, a larger value is worse.
+- In the practiced dataset `x=[1,2,3,4]`, `y_true=[20,40,60,80]`, `b=0`: at `w=10`, MSE **750**; at `w=15`, **187.5**. These weights were modified manually.
+- For one sample `x=4`, target `y=10`: `L(w,b) = (4w+b-10)^2`. This names a loss function that depends on `w` and `b`; it is **not** a product `L*w*b`.
+- Partial derivatives for that one-sample loss: `∂L/∂w = 8(4w+b-10)`, `∂L/∂b = 2(4w+b-10)`.
+
+Full explanation: [linear regression, loss and gradients](notes/05-linear-regression-loss-and-gradients.md). Runnable example: [prediction and loss only](examples/linear_regression_and_mse.py).
+
+**Not done:** trained parameter updates, full output-layer/XOR forward pass, chain rule through a network, or backpropagation.
