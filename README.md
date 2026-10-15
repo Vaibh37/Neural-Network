@@ -19,6 +19,8 @@ Personal notes and runnable Python examples for learning neural network fundamen
 | [notes/02-training-and-loss.md](notes/02-training-and-loss.md) | How training works conceptually, squared error, and loss minimization |
 | [notes/03-activation-functions.md](notes/03-activation-functions.md) | Why activations matter; worked ReLU and sigmoid examples |
 | [notes/04-hidden-layer-forward-pass.md](notes/04-hidden-layer-forward-pass.md) | Detailed 2-neuron and 3-neuron forward passes, dimensions and diagrams |
+| [notes/05-linear-regression-loss-and-gradients.md](notes/05-linear-regression-loss-and-gradients.md) | Practiced NumPy MSE, linear prediction, derivative notation and single-sample loss gradients |
+| [examples/linear_regression_and_mse.py](examples/linear_regression_and_mse.py) | Reproducible prediction and MSE checks; no parameter training |
 | [CHEATSHEET.md](CHEATSHEET.md) | Fast formula and terminology reference |
 | [examples/hidden_layer_numpy.py](examples/hidden_layer_numpy.py) | Executable NumPy forward pass with assertions |
 | [assets/hidden-layer-forward-pass.svg](assets/hidden-layer-forward-pass.svg) | Scalable diagram of calculations inside a hidden layer |
@@ -38,6 +40,7 @@ Then run:
 python examples/neuron.py
 python examples/loss.py
 python examples/hidden_layer_numpy.py
+python examples/linear_regression_and_mse.py
 ```
 
 ## Source
@@ -47,8 +50,9 @@ python examples/hidden_layer_numpy.py
 ## Current status
 
 **Fundamentals:** Neurons, weights, bias, forward propagation, ReLU and sigmoid practiced through 15 October 2026.  
-**Loss:** Conceptual introduction only; full training not yet implemented.  
-**Next to learn:** loss functions in more depth, gradient descent, backpropagation, and training a small model.
+**Loss:** Squared error and NumPy MSE implemented and practiced; linear regression predictions evaluated at manually selected weights.
+**Calculus:** Derivative notation, power/chain rules, simple partial derivatives and the origin of `L(w,b)` practiced. Gradient descent was explained but **not yet implemented**.  
+**Next to learn:** MSE gradients for model parameters, gradient descent code and a training loop, then backpropagation and the 2→3→1 XOR network (target: 20 October 2026).
 
 The NumPy forward-pass example has hand-picked weights. **It is not a trained network.**
 
