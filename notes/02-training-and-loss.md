@@ -103,3 +103,11 @@ What is the loss? **16**.
 ## Next
 
 Learn how the network can update its parameters using **gradient descent**, then study **backpropagation**. Do not mistake understanding the training loop for having implemented those methods.
+
+## 6. New checkpoint: NumPy MSE and linear prediction (15 October 2026)
+
+The learner **implemented** mean squared error using NumPy arrays: subtract predictions, square elementwise with `** 2`, and take `np.mean()`. For `actual=[10,20,30,40]` and `predicted=[12,18,33,37]`, MSE is **6.5**.
+
+A separate linear prediction example used `y_pred = w * x + b`, with `x=[1,2,3,4]`, targets `[20,40,60,80]`, `w=10`, `b=0`, and MSE **750**. Manually changing `w` to 15 gave MSE **187.5**. This was **not** gradient descent or learned parameter updates.
+
+For derivation of the loss notation and partial gradients, see [05 — From a forward pass to a loss gradient](05-linear-regression-loss-and-gradients.md). Next: implement parameter updates, then backpropagation.
