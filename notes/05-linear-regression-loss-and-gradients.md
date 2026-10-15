@@ -6,9 +6,9 @@
 
 For one input column $x$, our 3-neuron hidden layer computed:
 
-$
+$$
 Z=Wx+b,\qquad A=\operatorname{ReLU}(Z).
-$
+$$
 
 With $x=[[2],[-1]]$, $W=[[2,1],[-1,3],[1,-2]]$, and $b=[[1],[2],[-3]]$, the result was $Z=[[4],[-3],[1]]$ and $A=[[4],[0],[1]]$, shape $(3,1)$. These weights were chosen manually. **We have not completed the full 2→3→1 output-layer forward pass or trained the XOR model.**
 
@@ -16,9 +16,9 @@ With $x=[[2],[-1]]$, $W=[[2,1],[-1,3],[1,-2]]$, and $b=[[1],[2],[-3]]$, the resu
 
 For $n$ examples, squared errors average to:
 
-$
+$$
 \operatorname{MSE}=\frac{1}{n}\sum_{i=1}^{n}(\hat y_i-y_i)^2.
-$
+$$
 
 ```python
 import numpy as np
@@ -42,9 +42,9 @@ The sign of the error does not affect **squared** error; $\hat y-y$ and $y-\hat 
 
 A linear model with input $x$, weight $w$, and bias $b$ makes predictions using:
 
-$
+$$
 \hat y=wx+b
-$
+$$
 
 The practiced example was:
 
@@ -65,9 +65,9 @@ By manually changing only $w$ from 10 to 15, the loss fell to 187.5. The model *
 
 With $b=0$ and the above data, the loss as a function of $w$ is:
 
-$
+$$
 L(w)=\operatorname{mean}((20x-wx)^2)=7.5(w-20)^2.
-$
+$$
 
 Thus $w=20$ gives zero loss. To read the graph: increasing $w$ moves right on the horizontal axis; higher loss is upward. To the left of $w=20$, moving right is downhill. To the right, moving left is downhill.
 
@@ -77,9 +77,9 @@ $\frac{dL}{dw}$ is the derivative of loss with respect to the weight. $\frac{\pa
 
 For our fixed-bias loss curve:
 
-$
+$$
 \frac{dL}{dw}=15(w-20).
-$
+$$
 
 - Negative derivative (left of 20): a small positive change of $w$ decreases loss.
 - Positive derivative (right of 20): a small negative change of $w$ decreases loss.
@@ -99,12 +99,12 @@ The function notation $L(w,b)$ means **loss depends on these two parameters**; t
 
 Differentiate using the chain rule:
 
-$
+$$
 \frac{\partial L}{\partial w}=2(4w+b-10)\cdot4=8(4w+b-10),
-$
-$
+$$
+$$
 \frac{\partial L}{\partial b}=2(4w+b-10)\cdot1=2(4w+b-10).
-$
+$$
 
 These are gradients of **one-example squared error**, not an independently trained model or the batch MSE.
 
