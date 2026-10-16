@@ -8,9 +8,9 @@ A dense neuron computes z = w · x + b. A whole dense layer computes Z = WX + b.
 
 An activation function transforms z, typically nonlinearly. The complete activated layer is:
 
-$$
+```math
 Z=WX+b,\qquad A=f(Z).
-$$
+```
 
 Different activations produce different results for the same Z.
 
@@ -18,17 +18,17 @@ Different activations produce different results for the same Z.
 
 **Rectified Linear Unit:**
 
-$$
-\operatorname{ReLU}(z)=\max(0,z).
-$$
+```math
+\mathrm{ReLU}(z)=\max(0,z).
+```
 
 The max function picks the **larger** number: max(0,-3)=0, max(0,5)=5.
 
-$$
-\operatorname{ReLU}\begin{pmatrix}-3\\5\\-2\end{pmatrix}
+```math
+\mathrm{ReLU}\begin{pmatrix}-3\\5\\-2\end{pmatrix}
 =
 \begin{pmatrix}0\\5\\0\end{pmatrix}.
-$$
+```
 
 Negative inputs become 0. Zero stays 0. Positive inputs remain unchanged. ReLU is common in hidden layers, although other functions are also used.
 
@@ -36,9 +36,9 @@ Negative inputs become 0. Zero stays 0. Positive inputs remain unchanged. ReLU i
 
 ## 3. Sigmoid
 
-$$
+```math
 \sigma(z)=\frac{1}{1+e^{-z}}.
-$$
+```
 
 The output lies **strictly between 0 and 1** for finite real z:
 
