@@ -1,6 +1,6 @@
 # Neural Network Fundamentals — Cheat Sheet
 
-**Checkpoint:** 16 October 2026. Includes a single-example gradient descent training loop; hidden-layer backpropagation is still upcoming.
+**Checkpoint:** 16 October 2026. Single-example and four-example NumPy batch training practiced; ReLU derivative and chain rule introduced. Hidden-layer backpropagation remains upcoming.
 
 ## One neuron
 
@@ -67,7 +67,7 @@ Output shape: **(3,1)**. See [step-by-step lesson](notes/04-hidden-layer-forward
 
 ## Training status
 
-A single linear neuron **has** been trained for five updates on one example, with manual gradients. Backpropagation through hidden layers, multi-example dataset training and a trained digit/XOR classifier **have not** been implemented. A hidden-layer forward pass alone is not training.
+A single linear neuron **has** been trained both on one example (plain Python) and on four examples (vectorized NumPy full-batch MSE). Backpropagation through hidden layers and a trained digit/XOR classifier **have not** been implemented. A hidden-layer forward pass alone is not training.
 
 ## MSE and linear prediction — practiced 15 October 2026
 
@@ -81,7 +81,7 @@ A single linear neuron **has** been trained for five updates on one example, wit
 
 Full explanation: [linear regression, loss and gradients](notes/05-linear-regression-loss-and-gradients.md). Runnable example: [prediction and loss only](examples/linear_regression_and_mse.py).
 
-**Now done (16 October):** one-example weight/bias parameter updates and a five-epoch Python loop. **Not done:** full XOR network, chain rule through multiple layers, or backpropagation.
+**Now done (16 October):** single-example training; four-example vectorized MSE gradients and a five-epoch batch loop. **Introduced:** ReLU derivative and chain rule through one activation. **Not done:** full XOR network, chain rule through multiple layers, or hidden-layer backpropagation.
 
 
 ## Single-example training equations (16 October)
@@ -99,3 +99,46 @@ w&\leftarrow w-\alpha\,dw,\quad b\leftarrow b-\alpha\,db.
 Repeat with **updated** w and b. A learning rate alpha is chosen and tested; too large can overshoot. Starting with x=2, y=10, w=3, b=1, alpha=0.05: prediction **7→8.5→9.25→9.625→9.8125→9.90625** and loss **9→2.25→0.5625→0.140625→0.03515625→0.0087890625**.
 
 See [full lesson](notes/06-first-gradient-descent-training-loop.md) and [runnable training loop](examples/train_single_neuron.py). **Do not confuse target (10), prediction (initially 7) and loss (initially 9).**
+
+
+## Full-batch NumPy training (16 October)
+
+Four samples but **one shared neuron** (one scalar weight w and bias b):
+
+~~~python
+x = np.array([1.0, 2.0, 3.0, 4.0])
+y = np.array([5.0, 10.0, 15.0, 20.0])
+pred_y = w * x + b
+L = np.mean((pred_y - y) ** 2)  # Square first, THEN average
+dw = 2 * np.mean((pred_y - y) * x)
+db = 2 * np.mean(pred_y - y)
+w = w - learning_rate * dw
+b = b - learning_rate * db
+~~~
+
+- **w** is updated; **dw = ∂L/∂w** is the calculated *weight gradient*, not another weight or a second neuron.
+- **b** is updated with **db = ∂L/∂b**, not dw.
+- Each example contributes its own error and gradient. Average those contributions before one full-batch parameter update.
+- Initial: w = 3, b = 1, learning_rate = 0.05, initial MSE = **21.0**, first dw = **-25**, db = **-8**. After five updates MSE ≈ **0.325768**.
+- A gradient must be **recomputed every epoch** from current parameters.
+
+## ReLU derivative and local chain rule
+
+~~~math
+z=wx+b,\quad a=\operatorname{ReLU}(z),\quad L=(a-y)^2
+~~~
+
+~~~math
+\frac{\partial L}{\partial z}
+=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}
+=2(a-y)\operatorname{ReLU}'(z)
+~~~
+
+~~~python
+z = np.array([-3.0, 2.0, 0.0, 5.0])
+relu_prime = (z > 0).astype(float)  # [0., 1., 0., 1.]
+~~~
+
+ReLU'(z) is 0 for z < 0 and 1 for z > 0; at exactly 0 the derivative is undefined, and the code uses 0 by convention. For z = -3 and y = 2: a = 0, ∂L/∂a = -4, ∂a/∂z = 0, so ∂L/∂z = 0. **Hidden-layer backpropagation remains next.**
+
+Sources: [batch training lesson](notes/07-vectorized-batch-gradient-descent.md), [activation chain rule lesson](notes/08-relu-derivative-and-chain-rule-intro.md).
