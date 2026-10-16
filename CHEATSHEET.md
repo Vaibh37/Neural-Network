@@ -1,6 +1,6 @@
 # Neural Network Fundamentals — Cheat Sheet
 
-**Checkpoint:** 15 October 2026. This is a **forward-pass reference**, not yet a model-training guide.
+**Checkpoint:** 16 October 2026. Includes a single-example gradient descent training loop; hidden-layer backpropagation is still upcoming.
 
 ## One neuron
 
@@ -65,9 +65,9 @@ A=\mathrm{ReLU}(Z)=\begin{bmatrix}4\\0\\1\end{bmatrix}.
 
 Output shape: **(3,1)**. See [step-by-step lesson](notes/04-hidden-layer-forward-pass.md) and [runnable example](examples/hidden_layer_numpy.py).
 
-## What we have *not* implemented
+## Training status
 
-Backpropagation, gradient calculations, optimizer updates, training loops, evaluation, or a trained digit classifier. A successful forward pass is **not** training.
+A single linear neuron **has** been trained for five updates on one example, with manual gradients. Backpropagation through hidden layers, multi-example dataset training and a trained digit/XOR classifier **have not** been implemented. A hidden-layer forward pass alone is not training.
 
 ## MSE and linear prediction — practiced 15 October 2026
 
@@ -81,4 +81,21 @@ Backpropagation, gradient calculations, optimizer updates, training loops, evalu
 
 Full explanation: [linear regression, loss and gradients](notes/05-linear-regression-loss-and-gradients.md). Runnable example: [prediction and loss only](examples/linear_regression_and_mse.py).
 
-**Not done:** trained parameter updates, full output-layer/XOR forward pass, chain rule through a network, or backpropagation.
+**Now done (16 October):** one-example weight/bias parameter updates and a five-epoch Python loop. **Not done:** full XOR network, chain rule through multiple layers, or backpropagation.
+
+
+## Single-example training equations (16 October)
+
+For one example and a linear output:
+
+~~~math
+\begin{aligned}
+\hat y&=wx+b, \quad L=(\hat y-y)^2,\\
+dw&=2(\hat y-y)x,\quad db=2(\hat y-y),\\
+w&\leftarrow w-\alpha\,dw,\quad b\leftarrow b-\alpha\,db.
+\end{aligned}
+~~~
+
+Repeat with **updated** w and b. A learning rate alpha is chosen and tested; too large can overshoot. Starting with x=2, y=10, w=3, b=1, alpha=0.05: prediction **7→8.5→9.25→9.625→9.8125→9.90625** and loss **9→2.25→0.5625→0.140625→0.03515625→0.0087890625**.
+
+See [full lesson](notes/06-first-gradient-descent-training-loop.md) and [runnable training loop](examples/train_single_neuron.py). **Do not confuse target (10), prediction (initially 7) and loss (initially 9).**

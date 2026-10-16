@@ -41,6 +41,7 @@ python examples/neuron.py
 python examples/loss.py
 python examples/hidden_layer_numpy.py
 python examples/linear_regression_and_mse.py
+python examples/train_single_neuron.py
 ```
 
 ## Source
@@ -49,11 +50,11 @@ python examples/linear_regression_and_mse.py
 
 ## Current status
 
-**Fundamentals:** Neurons, weights, bias, forward propagation, ReLU and sigmoid practiced through 15 October 2026.  
+**Fundamentals:** Neurons, weights, bias, forward propagation, ReLU and sigmoid practiced through 16 October 2026.  
 **Loss:** Squared error and NumPy MSE implemented and practiced; linear regression predictions evaluated at manually selected weights.
-**Calculus:** Derivative notation, power/chain rules, simple partial derivatives and the origin of `L(w,b)` practiced. Gradient descent was explained but **not yet implemented**.  
-**Next to learn:** MSE gradients for model parameters, gradient descent code and a training loop, then backpropagation and the 2→3→1 XOR network (target: 20 October 2026).
+**Calculus and training:** Chain rule and partial derivatives practiced. **Implemented on 16 October:** a one-example, five-epoch training loop with manually calculated gradients and weight/bias updates. The verified prediction moved from 7 to 9.90625 and loss from 9 to 0.0087890625.  
+**Next to learn:** vectorized multi-example training and dataset MSE gradients, then activation derivatives, backpropagation and the 2→3→1 XOR network (target: 20 October 2026).
 
-The NumPy forward-pass example has hand-picked weights. **It is not a trained network.**
+The hidden-layer NumPy forward-pass example still has hand-picked weights. **It is not a trained multi-layer network.** The new single-neuron script does train a linear model on one example; it is not an XOR classifier.
 
 For matrix arithmetic and broadcasting details, see [ML-MATH](https://github.com/Vaibh37/ML-MATH/tree/main/linear-algebra/matrices).
