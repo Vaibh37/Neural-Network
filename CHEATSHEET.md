@@ -4,9 +4,9 @@
 
 ## One neuron
 
-$$
+```math
 z=w\cdot x+b,\quad a=f(z).
-$$
+```
 
 - **x:** numeric input vector.
 - **w:** weights (one per input).
@@ -20,9 +20,9 @@ z = (1 × 2) + (-1 × 3) + 1 = **0**. Sigmoid(0) = **0.5**.
 
 ## Dense layer (multiple neurons)
 
-$$
+```math
 Z=WX+b,\qquad A=f(Z).
-$$
+```
 
 With **one column input**, W:(3,2), x:(2,1), b:(3,1) gives Z:(3,1), A:(3,1).
 
@@ -51,17 +51,17 @@ ReLU commonly appears in hidden layers; sigmoid can map a binary classifier logi
 
 ## Full practice example
 
-$$
+```math
 x=\begin{bmatrix}2\\-1\end{bmatrix},\quad
 W=\begin{bmatrix}2&1\\-1&3\\1&-2\end{bmatrix},\quad
 b=\begin{bmatrix}1\\2\\-3\end{bmatrix}.
-$$
+```
 
-$$
+```math
 Z=Wx+b=\begin{bmatrix}4\\-3\\1\end{bmatrix},
 \quad
-A=\operatorname{ReLU}(Z)=\begin{bmatrix}4\\0\\1\end{bmatrix}.
-$$
+A=\mathrm{ReLU}(Z)=\begin{bmatrix}4\\0\\1\end{bmatrix}.
+```
 
 Output shape: **(3,1)**. See [step-by-step lesson](notes/04-hidden-layer-forward-pass.md) and [runnable example](examples/hidden_layer_numpy.py).
 
