@@ -12,19 +12,19 @@ Z=Wx+b,\qquad A=\mathrm{ReLU}(Z).
 
 For the independently solved example:
 
-$
+```math
 x=\begin{bmatrix}2\\-1\end{bmatrix},
 \quad
 W=\begin{bmatrix}2&1\\-1&3\\1&-2\end{bmatrix},
 \quad
 b=\begin{bmatrix}1\\2\\-3\end{bmatrix}
-$
+```
 
-$
+```math
 Z=\begin{bmatrix}4\\-3\\1\end{bmatrix},
 \quad
 A=\begin{bmatrix}4\\0\\1\end{bmatrix}
-$
+```
 
 Both outputs have shape **(3, 1)**. These weights were chosen manually. **We have not completed the full 2→3→1 output-layer forward pass or trained the XOR model.**
 
