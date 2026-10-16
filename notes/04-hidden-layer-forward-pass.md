@@ -6,13 +6,13 @@
 
 Each dense neuron receives the preceding layer's input, performs a **weighted sum**, adds its **own bias**, and applies an **activation** such as ReLU.
 
-For one neuron: $z_i=w_i\cdot x+b_i$, then $a_i=\operatorname{ReLU}(z_i)$.
+For one neuron: $z_i=w_i\cdot x+b_i$, then $a_i=\mathrm{ReLU}(z_i)$.
 
 For the complete dense layer:
 
-$$
-Z=Wx+b,\qquad A=\operatorname{ReLU}(Z).
-$$
+```math
+Z=Wx+b,\qquad A=\mathrm{ReLU}(Z).
+```
 
 The multiplication, bias addition, and activation are *operations* of the layer. They are **not three separate layers of neurons**. Some programming frameworks represent the linear transform and activation as separate modules, which is a code-organization detail.
 
@@ -22,48 +22,48 @@ The multiplication, bias addition, and activation are *operations* of the layer.
 
 ## Worked example: two inputs and two hidden neurons
 
-$$
+```math
 x=\begin{bmatrix}3\\4\end{bmatrix},
 \quad
 W=\begin{bmatrix}2&-1\\-1&1\end{bmatrix},
 \quad
 b=\begin{bmatrix}1\\-2\end{bmatrix}.
-$$
+```
 
 **Neuron 1** uses row 1 of W and bias 1:
 
-$$
+```math
 z_1=(2\times3)+(-1\times4)+1=6-4+1=3.
-$$
+```
 
 **Neuron 2** uses row 2 of W and bias -2:
 
-$$
+```math
 z_2=(-1\times3)+(1\times4)-2=-3+4-2=-1.
-$$
+```
 
 Combine their pre-activation values:
 
-$$
+```math
 Z=\begin{bmatrix}3\\-1\end{bmatrix}.
-$$
+```
 
 Apply ReLU elementwise:
 
-$$
+```math
 A=\begin{bmatrix}\max(0,3)\\\max(0,-1)\end{bmatrix}
 =\begin{bmatrix}3\\0\end{bmatrix}.
-$$
+```
 
 Both values in A become the **input values for the next layer**, assuming another layer follows.
 
 ## Independent final challenge: three hidden neurons
 
-$$
+```math
 x=\begin{bmatrix}2\\-1\end{bmatrix},\quad
 W=\begin{bmatrix}2&1\\-1&3\\1&-2\end{bmatrix},\quad
 b=\begin{bmatrix}1\\2\\-3\end{bmatrix}.
-$$
+```
 
 Work out all three weighted sums:
 
@@ -71,11 +71,11 @@ Work out all three weighted sums:
 - Neuron 2: (-1 × 2) + (3 × -1) + 2 = **-3**.
 - Neuron 3: (1 × 2) + (-2 × -1) - 3 = **1**.
 
-$$
+```math
 Z=\begin{bmatrix}4\\-3\\1\end{bmatrix},
 \quad
-A=\operatorname{ReLU}(Z)=\begin{bmatrix}4\\0\\1\end{bmatrix}.
-$$
+A=\mathrm{ReLU}(Z)=\begin{bmatrix}4\\0\\1\end{bmatrix}.
+```
 
 **Dimensions:** W:(3,2), x:(2,1), b:(3,1), Z:(3,1), A:(3,1). ReLU does **not** change the shape.
 
