@@ -172,3 +172,74 @@ For \(z=wx+b\), \(a=\mathrm{ReLU}(z)\), and \(L=(a-y)^2\):
 ![Chain rule cheat sheet](assets/chain-rule/cheat-sheet.svg)
 
 Full derivation: [09 — Chain Rule and Backpropagation Gradients](notes/09-chain-rule-and-backpropagation-gradients.md).
+
+
+## Two inputs → three hidden neurons → one output (17 October 2026)
+
+**This is one worked XOR sample (x=[1,0], target y=1) using manually chosen weights.** Full hidden-layer training and XOR classification are not completed.
+
+### Hidden-layer forward pass
+
+A neuron with two inputs uses **two weights and one bias**, not the single-input equation wx+b alone:
+
+~~~math
+z_i = w_{i1}x_1+w_{i2}x_2+b_i,\qquad h_i=\operatorname{ReLU}(z_i)
+~~~
+
+With \(W_{\mathrm{hidden}}=\begin{bmatrix}1&1\\-1&1\\2&-1\end{bmatrix}\), \(x=[1,0]\), and zero hidden biases:
+
+~~~math
+z=[1,-1,2],\quad h=\operatorname{ReLU}(z)=[1,0,2]
+~~~
+
+### Output-layer forward pass
+
+New **independent** output weights \(v=[0.2,0.4,0.3]\), and \(b_{\mathrm{out}}=0\):
+
+~~~math
+\hat y=v_1h_1+v_2h_2+v_3h_3+b_{\mathrm{out}}=0.8
+~~~
+
+With linear output and **single-example** squared loss, \(L=(0.8-1)^2=0.04\).
+
+### Output-layer backpropagation
+
+**Do not multiply the original functions together: multiply the local derivatives along the dependency path.**
+
+~~~math
+\frac{\partial L}{\partial\hat y}=2(\hat y-y)=-0.4
+~~~
+
+~~~math
+\frac{\partial L}{\partial v_i}
+=\frac{\partial L}{\partial\hat y}\cdot\frac{\partial\hat y}{\partial v_i}
+=2(\hat y-y)h_i
+~~~
+
+~~~math
+\frac{\partial\hat y}{\partial b_{\mathrm{out}}}
+=\frac{\partial}{\partial b_{\mathrm{out}}}(v_1h_1+v_2h_2+v_3h_3+b_{\mathrm{out}})
+=0+0+0+1=1
+~~~
+
+~~~math
+\frac{\partial L}{\partial b_{\mathrm{out}}}
+=\frac{\partial L}{\partial\hat y}\cdot 1=-0.4
+~~~
+
+**Gradients:** \(dv=[-0.4,0,-0.8]\), \(db_{\mathrm{out}}=-0.4\). During backpropagation **parameters do not change**.
+
+### Gradient descent: update after calculating gradients
+
+With \(\eta=0.05\), apply \(\theta_{\mathrm{new}}=\theta-\eta\,\partial L/\partial\theta\):
+
+~~~math
+v_{\mathrm{new}}=[0.22,0.40,0.34],\quad b_{\mathrm{out,new}}=0.02
+~~~
+
+New prediction \(0.92\); new loss \(0.0064\) (**84% less loss on this one example**). Hidden-layer parameters were deliberately **not updated**.
+
+![Output gradient quick reference](assets/lesson-10-output-layer/05-quick-reference.svg)
+
+Full explanation: [Lesson 10 — output-layer forward and backpropagation](notes/10-output-layer-forward-backprop-and-update.md).
+Runnable NumPy check: [examples/output_layer_single_step.py](examples/output_layer_single_step.py).
