@@ -22,6 +22,7 @@ Personal notes and runnable Python examples for learning neural network fundamen
 | [notes/05-linear-regression-loss-and-gradients.md](notes/05-linear-regression-loss-and-gradients.md) | Practiced NumPy MSE, linear prediction, derivative notation and single-sample loss gradients |
 | [notes/07-vectorized-batch-gradient-descent.md](notes/07-vectorized-batch-gradient-descent.md) | Four-example NumPy gradients, full-batch training, five-epoch loss trace and common mistakes |
 | [notes/08-relu-derivative-and-chain-rule-intro.md](notes/08-relu-derivative-and-chain-rule-intro.md) | ReLU derivative, Boolean masks, and first chain-rule step through an activation |
+| [notes/09-chain-rule-and-backpropagation-gradients.md](notes/09-chain-rule-and-backpropagation-gradients.md) | Chain rule derived twice, weight and bias gradients, worked neuron example and four linked diagrams |
 | [examples/train_batch_neuron_numpy.py](examples/train_batch_neuron_numpy.py) | Executable 4-example training loop with numeric checks |
 | [examples/relu_derivative_numpy.py](examples/relu_derivative_numpy.py) | Executable ReLU derivative with NumPy |
 | [examples/linear_regression_and_mse.py](examples/linear_regression_and_mse.py) | Reproducible prediction and MSE checks; no parameter training |
@@ -58,8 +59,8 @@ python examples/relu_derivative_numpy.py
 
 **Checkpoint: 16 October 2026.** Single-example plain-Python training and vectorized **four-example, five-epoch full-batch NumPy training** are implemented. For x = [1,2,3,4], y = [5,10,15,20], w = 3, b = 1, and learning rate 0.05, dataset MSE falls from **21.0 to approximately 0.325768**.
 
-**Activation derivatives:** ReLU'(z) with a NumPy Boolean mask and .astype(float) is practiced. The chain rule for **z -> a -> L** is introduced and derived in notes, but full weight gradients through an activation are next.
+**Activation derivatives and chain rule:** ReLU'(z) with a NumPy Boolean mask and .astype(float) is practiced. On **17 October**, the single-neuron chain rule **w -> z -> a -> L** and both weight/bias gradients were derived by hand. Hidden-layer gradients and XOR training remain next.
 
 **Not yet done:** training a hidden layer, full backpropagation through multiple neurons, and the **2 -> 3 -> 1 XOR** network. Target around **20 October 2026**, based on understanding rather than a rigid deadline.
 
-For the precise batch training trace, see [lesson 07](notes/07-vectorized-batch-gradient-descent.md). For ReLU and the chain-rule checkpoint, see [lesson 08](notes/08-relu-derivative-and-chain-rule-intro.md).
+For the precise batch training trace, see [lesson 07](notes/07-vectorized-batch-gradient-descent.md). For ReLU basics, see [lesson 08](notes/08-relu-derivative-and-chain-rule-intro.md). For weight/bias chain-rule derivation and diagrams, see [lesson 09](notes/09-chain-rule-and-backpropagation-gradients.md).
