@@ -21,7 +21,7 @@ Forward dependency: **w -> z -> a -> L**. The backpropagation calculation follow
 ## ReLU and its derivative
 
 ~~~math
-a=\operatorname{ReLU}(z)=\max(0,z)
+a=\mathrm{ReLU}(z)=\max(0,z)
 ~~~
 
 ~~~math
@@ -51,7 +51,7 @@ See [runnable ReLU derivative example](../examples/relu_derivative_numpy.py).
 We have:
 
 ~~~math
-z=wx+b,\qquad a=\operatorname{ReLU}(z),\qquad L=(a-y)^2.
+z=wx+b,\qquad a=\mathrm{ReLU}(z),\qquad L=(a-y)^2.
 ~~~
 
 To find how **z** affects **L**, we must go through the intermediate variable **a**:
