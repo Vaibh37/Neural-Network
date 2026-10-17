@@ -20,6 +20,8 @@ The numerical weights in this lesson were **assigned manually to explain the com
 
 ![Three-layer network with distinct connections](../assets/lesson-10-output-layer/01-network-architecture.svg)
 
+[High-resolution PNG (3200 × 1800)](../assets/lesson-10-output-layer/01-network-architecture.png)
+
 ## 2. The hidden-layer forward pass
 
 For **one** neuron with **one** input:
@@ -59,6 +61,8 @@ h_1=1,\quad h_2=0,\quad h_3=2
 The output of the hidden layer is therefore $\mathbf{h}=[1,0,2]$. **$z$ is before ReLU; $h$ is after ReLU.**
 
 ![Hidden weighted sums and ReLU](../assets/lesson-10-output-layer/02-hidden-forward-relu.svg)
+
+[High-resolution PNG (3200 × 1800)](../assets/lesson-10-output-layer/02-hidden-forward-relu.png)
 
 ## 3. Output neuron: more weights, same weighted sum
 
@@ -182,6 +186,8 @@ The derivative is not multiplied by $h_1,h_2,h_3$ or $x$ because **the derivativ
 
 ![Output layer gradients](../assets/lesson-10-output-layer/03-output-gradients.svg)
 
+[High-resolution PNG (3200 × 1800)](../assets/lesson-10-output-layer/03-output-gradients.png)
+
 ### 4.5 Gradient summary
 
 | Parameter | Value before update | Gradient |
@@ -237,6 +243,8 @@ Loss changed from $0.04$ to $0.0064$, an **84% reduction on this one example aft
 
 ![Output layer update and loss comparison](../assets/lesson-10-output-layer/04-gradient-descent-loss.svg)
 
+[High-resolution PNG (3200 × 1800)](../assets/lesson-10-output-layer/04-gradient-descent-loss.png)
+
 ## 7. Equivalent minimal NumPy code
 
 A runnable version is in [examples/output_layer_single_step.py](../examples/output_layer_single_step.py).
@@ -284,3 +292,5 @@ assert np.isclose(new_loss, 0.0064)
 **Next lesson:** backpropagate the output error through $h_1,h_2,h_3$, differentiate ReLU and each hidden-layer weight, then combine all gradients in one update.
 
 ![Fast reference](../assets/lesson-10-output-layer/05-quick-reference.svg)
+
+[High-resolution PNG (3200 × 1800)](../assets/lesson-10-output-layer/05-quick-reference.png)
