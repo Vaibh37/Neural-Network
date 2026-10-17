@@ -142,3 +142,33 @@ relu_prime = (z > 0).astype(float)  # [0., 1., 0., 1.]
 ReLU'(z) is 0 for z < 0 and 1 for z > 0; at exactly 0 the derivative is undefined, and the code uses 0 by convention. For z = -3 and y = 2: a = 0, ∂L/∂a = -4, ∂a/∂z = 0, so ∂L/∂z = 0. **Hidden-layer backpropagation remains next.**
 
 Sources: [batch training lesson](notes/07-vectorized-batch-gradient-descent.md), [activation chain rule lesson](notes/08-relu-derivative-and-chain-rule-intro.md).
+
+
+## One-neuron backpropagation and chain rule (17 October 2026)
+
+**Practiced:** Differentiated the loss, ReLU activation, weighted sum, and combined those gradients using the chain rule. This is a mathematical derivation for one neuron, **not** completed training of the XOR network.
+
+For \(z=wx+b\), \(a=\mathrm{ReLU}(z)\), and \(L=(a-y)^2\):
+
+\`\`\`math
+\frac{\partial L}{\partial w}
+=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}\frac{\partial z}{\partial w}
+\`\`\`
+
+\`\`\`math
+\frac{\partial L}{\partial b}
+=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}\frac{\partial z}{\partial b}
+\`\`\`
+
+| Local derivative | Result |
+| --- | --- |
+| \(\partial L/\partial a\) | \(2(a-y)\) |
+| \(\partial a/\partial z\) | \(1\) for \(z>0\); \(0\) for \(z<0\); undefined at \(z=0\) |
+| \(\partial z/\partial w\) | \(x\) |
+| \(\partial z/\partial b\) | \(1\) |
+
+**Worked example:** \(x=2,w=3,b=1,y=10\) gives \(z=7,a=7,L=9\). Hence \(\partial L/\partial w=(-6)(1)(2)=\mathbf{-12}\) and \(\partial L/\partial b=(-6)(1)(1)=\mathbf{-6}\).
+
+![Chain rule cheat sheet](assets/chain-rule/cheat-sheet.svg)
+
+Full derivation: [09 — Chain Rule and Backpropagation Gradients](notes/09-chain-rule-and-backpropagation-gradients.md).
