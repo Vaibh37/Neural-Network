@@ -1,0 +1,40 @@
+name: Render lesson 10 diagrams to PNG
+
+on:
+  push:
+    paths:
+      - 'assets/lesson-10-output-layer/*.svg'
+      - '.github/workflows/render-lesson-10-pngs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Install SVG renderer
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+      - name: Render high-resolution PNG images
+        shell: bash
+        run: |
+          set -euo pipefail
+          for svg in assets/lesson-10-output-layer/*.svg; do
+            rsvg-convert --keep-aspect-ratio --width 3200 --output "${svg%.svg}.png" "$svg"
+          done
+      - name: Commit generated PNG files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add assets/lesson-10-output-layer/*.png
+          if git diff --cached --quiet; then
+            echo 'PNG files already up to date'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "assets: render high-resolution lesson 10 PNGs"
+          git push
