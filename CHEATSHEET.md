@@ -125,13 +125,13 @@ b = b - learning_rate * db
 ## ReLU derivative and local chain rule
 
 ~~~math
-z=wx+b,\quad a=\operatorname{ReLU}(z),\quad L=(a-y)^2
+z=wx+b,\quad a=\mathrm{ReLU}(z),\quad L=(a-y)^2
 ~~~
 
 ~~~math
 \frac{\partial L}{\partial z}
 =\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}
-=2(a-y)\operatorname{ReLU}'(z)
+=2(a-y)\mathrm{ReLU}'(z)
 ~~~
 
 ~~~python
