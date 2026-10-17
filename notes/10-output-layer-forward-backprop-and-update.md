@@ -10,11 +10,11 @@ A neural network has **a separate weight for each connection**. Each neuron has 
 
 Our architecture:
 
-- **2 inputs:** \(x_1,x_2\)
-- **3 hidden neurons:** \(h_1,h_2,h_3\), each receives both inputs
-- **1 output neuron:** receives \(h_1,h_2,h_3\)
+- **2 inputs:** $x_1,x_2$
+- **3 hidden neurons:** $h_1,h_2,h_3$, each receives both inputs
+- **1 output neuron:** receives $h_1,h_2,h_3$
 
-The hidden layer therefore has \(2 \times 3=6\) weights and \(3\) biases. The output layer has \(3\) **new** weights and \(1\) bias: **13 trainable parameters total**.
+The hidden layer therefore has $2 \times 3=6$ weights and $3$ biases. The output layer has $3$ **new** weights and $1$ bias: **13 trainable parameters total**.
 
 The numerical weights in this lesson were **assigned manually to explain the computation**. A real training run initializes parameters, typically with a suitable random method, and updates them from gradients. We never copy the hidden-layer weights into the output layer.
 
@@ -24,39 +24,39 @@ The numerical weights in this lesson were **assigned manually to explain the com
 
 For **one** neuron with **one** input:
 
-\`\`\`math
+```math
 z = wx+b
-\`\`\`
+```
 
 For one neuron with **two** inputs, each input has its own weight:
 
-\`\`\`math
+```math
 z = w_1 x_1+w_2 x_2+b
-\`\`\`
+```
 
 The **same two inputs** enter all three hidden neurons. Each hidden neuron uses **different weights**.
 
-For this example, input \(x_1=1,\;x_2=0\), and all hidden biases are zero:
+For this example, input $x_1=1,\;x_2=0$, and all hidden biases are zero:
 
-\`\`\`math
+```math
 \begin{aligned}
 z_1 &= 1x_1+1x_2+0 = 1(1)+1(0)=1\\
 z_2 &= -1x_1+1x_2+0 = -1(1)+1(0)=-1\\
 z_3 &= 2x_1-1x_2+0 = 2(1)-1(0)=2
 \end{aligned}
-\`\`\`
+```
 
 Then apply **ReLU separately to each** weighted sum:
 
-\`\`\`math
+```math
 h_i=\operatorname{ReLU}(z_i)=\max(0,z_i)
-\`\`\`
+```
 
-\`\`\`math
+```math
 h_1=1,\quad h_2=0,\quad h_3=2
-\`\`\`
+```
 
-The output of the hidden layer is therefore \(\mathbf{h}=[1,0,2]\). **\(z\) is before ReLU; \(h\) is after ReLU.**
+The output of the hidden layer is therefore $\mathbf{h}=[1,0,2]$. **$z$ is before ReLU; $h$ is after ReLU.**
 
 ![Hidden weighted sums and ReLU](../assets/lesson-10-output-layer/02-hidden-forward-relu.svg)
 
@@ -66,25 +66,25 @@ The three hidden activations are now **inputs to the output neuron**.
 
 This neuron's **own** weights are:
 
-\`\`\`math
+```math
 v_1=0.2,\quad v_2=0.4,\quad v_3=0.3,\quad b_{\mathrm{out}}=0
-\`\`\`
+```
 
-Use \(v\) for the output weights so they cannot be confused with hidden-layer weights.
+Use $v$ for the output weights so they cannot be confused with hidden-layer weights.
 
-\`\`\`math
+```math
 z_{\mathrm{out}}=v_1h_1+v_2h_2+v_3h_3+b_{\mathrm{out}}
-\`\`\`
+```
 
-\`\`\`math
+```math
 =0.2(1)+0.4(0)+0.3(2)+0=\boxed{0.8}
-\`\`\`
+```
 
-**For this teaching example only**, the output activation is linear, so \(\hat y=z_{\mathrm{out}}=0.8\). For the target \(y=1\), use a single-example squared-error loss:
+**For this teaching example only**, the output activation is linear, so $\hat y=z_{\mathrm{out}}=0.8$. For the target $y=1$, use a single-example squared-error loss:
 
-\`\`\`math
+```math
 L=(\hat y-y)^2=(0.8-1)^2=\boxed{0.04}
-\`\`\`
+```
 
 **Note:** This is one forward pass for one example, not a trained XOR classifier. Our XOR project will train over all four input pairs.
 
@@ -92,7 +92,7 @@ L=(\hat y-y)^2=(0.8-1)^2=\boxed{0.04}
 
 We want to determine how the loss responds to **each output parameter**. First calculate the loss derivative:
 
-\`\`\`math
+```math
 \begin{aligned}
 \frac{\partial L}{\partial\hat y}
 &=\frac{\partial}{\partial\hat y}(\hat y-y)^2\\
@@ -100,64 +100,64 @@ We want to determine how the loss responds to **each output parameter**. First c
 &=2(\hat y-y)\cdot(1-0)\\
 &=2(0.8-1)=\boxed{-0.4}
 \end{aligned}
-\`\`\`
+```
 
-For every output weight, the dependence is **weight \(\rightarrow\hat y\rightarrow L\)**.
+For every output weight, the dependence is **weight $\rightarrow\hat y\rightarrow L$**.
 
 Therefore the **same chain rule** applies:
 
-\`\`\`math
+```math
 \frac{\partial L}{\partial v_i}
 =\frac{\partial L}{\partial\hat y}
 \cdot
 \frac{\partial\hat y}{\partial v_i}
-\`\`\`
+```
 
-### 4.1 Derivative with respect to \(v_1\)
+### 4.1 Derivative with respect to $v_1$
 
 Differentiate the prediction **term by term**, treating other independent parameters and hidden outputs as constants:
 
-\`\`\`math
+```math
 \begin{aligned}
 \frac{\partial\hat y}{\partial v_1}
 &=\frac{\partial}{\partial v_1}(v_1h_1+v_2h_2+v_3h_3+b_{\mathrm{out}})\\
 &=h_1(1)+0+0+0=\boxed{h_1=1}
 \end{aligned}
-\`\`\`
+```
 
 Multiply the two derivatives:
 
-\`\`\`math
+```math
 \frac{\partial L}{\partial v_1}=(-0.4)(1)=\boxed{-0.4}
-\`\`\`
+```
 
-### 4.2 Derivative with respect to \(v_2\)
+### 4.2 Derivative with respect to $v_2$
 
-\`\`\`math
+```math
 \frac{\partial\hat y}{\partial v_2}=0+h_2+0+0=h_2=0
-\`\`\`
+```
 
-\`\`\`math
+```math
 \frac{\partial L}{\partial v_2}=(-0.4)(0)=\boxed{0}
-\`\`\`
+```
 
-Because \(h_2=0\), changing \(v_2\) has no effect on this example's prediction. **That does not mean \(v_2\) will never learn on other inputs.**
+Because $h_2=0$, changing $v_2$ has no effect on this example's prediction. **That does not mean $v_2$ will never learn on other inputs.**
 
-### 4.3 Derivative with respect to \(v_3\)
+### 4.3 Derivative with respect to $v_3$
 
-\`\`\`math
+```math
 \frac{\partial\hat y}{\partial v_3}=0+0+h_3+0=h_3=2
-\`\`\`
+```
 
-\`\`\`math
+```math
 \frac{\partial L}{\partial v_3}=(-0.4)(2)=\boxed{-0.8}
-\`\`\`
+```
 
 ### 4.4 Derivative with respect to the output bias — complete derivation
 
 **Do not skip the differentiation of the bias.**
 
-\`\`\`math
+```math
 \begin{aligned}
 \frac{\partial\hat y}{\partial b_{\mathrm{out}}}
 &=\frac{\partial}{\partial b_{\mathrm{out}}}
@@ -165,20 +165,20 @@ Because \(h_2=0\), changing \(v_2\) has no effect on this example's prediction. 
 &=0+0+0+1\\
 &=\boxed{1}
 \end{aligned}
-\`\`\`
+```
 
 The loss depends on the bias through the prediction, so use the chain rule **again**:
 
-\`\`\`math
+```math
 \begin{aligned}
 \frac{\partial L}{\partial b_{\mathrm{out}}}
 &=\frac{\partial L}{\partial\hat y}
 \cdot\frac{\partial\hat y}{\partial b_{\mathrm{out}}}\\
 &=(-0.4)(1)=\boxed{-0.4}
 \end{aligned}
-\`\`\`
+```
 
-The derivative is not multiplied by \(h_1,h_2,h_3\) or \(x\) because **the derivative of the additive bias term with respect to itself is \(1\)**.
+The derivative is not multiplied by $h_1,h_2,h_3$ or $x$ because **the derivative of the additive bias term with respect to itself is $1$**.
 
 ![Output layer gradients](../assets/lesson-10-output-layer/03-output-gradients.svg)
 
@@ -186,54 +186,54 @@ The derivative is not multiplied by \(h_1,h_2,h_3\) or \(x\) because **the deriv
 
 | Parameter | Value before update | Gradient |
 |---|---:|---:|
-| \(v_1\) | 0.20 | -0.40 |
-| \(v_2\) | 0.40 | 0.00 |
-| \(v_3\) | 0.30 | -0.80 |
-| \(b_{\mathrm{out}}\) | 0.00 | -0.40 |
+| $v_1$ | 0.20 | -0.40 |
+| $v_2$ | 0.40 | 0.00 |
+| $v_3$ | 0.30 | -0.80 |
+| $b_{\mathrm{out}}$ | 0.00 | -0.40 |
 
 **Backpropagation only calculates these gradients. It does not update the weights or bias.**
 
 ## 5. Gradient descent: use the gradients to update the parameters
 
-Learning rate: \(\eta=0.05\).
+Learning rate: $\eta=0.05$.
 
-For any output parameter \(\theta\):
+For any output parameter $\theta$:
 
-\`\`\`math
+```math
 \theta_{\mathrm{new}}
 =\theta-\eta\frac{\partial L}{\partial\theta}
-\`\`\`
+```
 
 Calculate all gradients from the **same original forward pass**, then update the parameters:
 
-\`\`\`math
+```math
 \begin{aligned}
 v_{1,\mathrm{new}}&=0.2-0.05(-0.4)=0.22\\
 v_{2,\mathrm{new}}&=0.4-0.05(0)=0.40\\
 v_{3,\mathrm{new}}&=0.3-0.05(-0.8)=0.34\\
 b_{\mathrm{out,new}}&=0-0.05(-0.4)=0.02
 \end{aligned}
-\`\`\`
+```
 
 The **hidden-layer parameters remain unchanged** in this demonstration.
 
 ## 6. Run another forward pass and check the loss
 
-With the same hidden outputs \([1,0,2]\):
+With the same hidden outputs $[1,0,2]$:
 
-\`\`\`math
+```math
 \begin{aligned}
 \hat y_{\mathrm{new}}
 &=0.22(1)+0.40(0)+0.34(2)+0.02\\
 &=\boxed{0.92}
 \end{aligned}
-\`\`\`
+```
 
-\`\`\`math
+```math
 L_{\mathrm{new}}=(0.92-1)^2=\boxed{0.0064}
-\`\`\`
+```
 
-Loss changed from \(0.04\) to \(0.0064\), an **84% reduction on this one example after one output-layer update**. That is **not** a claim about XOR accuracy or future updates.
+Loss changed from $0.04$ to $0.0064$, an **84% reduction on this one example after one output-layer update**. That is **not** a claim about XOR accuracy or future updates.
 
 ![Output layer update and loss comparison](../assets/lesson-10-output-layer/04-gradient-descent-loss.svg)
 
@@ -241,7 +241,7 @@ Loss changed from \(0.04\) to \(0.0064\), an **84% reduction on this one example
 
 A runnable version is in [examples/output_layer_single_step.py](../examples/output_layer_single_step.py).
 
-\`\`\`python
+```python
 import numpy as np
 
 x = np.array([1.0, 0.0])
@@ -273,7 +273,7 @@ assert np.allclose(v, [0.22, 0.4, 0.34])
 assert np.isclose(b_out, 0.02)
 assert np.isclose(new_pred, 0.92)
 assert np.isclose(new_loss, 0.0064)
-\`\`\`
+```
 
 ## 8. What is completed, and what is next?
 
@@ -281,6 +281,6 @@ assert np.isclose(new_loss, 0.0064)
 
 **Not completed:** backpropagation into the **hidden neurons** and training on the **complete XOR dataset**.
 
-**Next lesson:** backpropagate the output error through \(h_1,h_2,h_3\), differentiate ReLU and each hidden-layer weight, then combine all gradients in one update.
+**Next lesson:** backpropagate the output error through $h_1,h_2,h_3$, differentiate ReLU and each hidden-layer weight, then combine all gradients in one update.
 
 ![Fast reference](../assets/lesson-10-output-layer/05-quick-reference.svg)
