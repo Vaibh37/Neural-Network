@@ -2,6 +2,38 @@
 
 Personal notes and runnable Python examples for learning neural network fundamentals from first principles.
 
+## XOR neural network from scratch — 18 October 2026
+
+A fully trainable **2 → 3 → 1** neural network built in **Python + NumPy**, with no deep-learning framework.
+
+![XOR neural network architecture](assets/xor/01-architecture.svg)
+
+The implementation uses **ReLU** in the hidden layer, **sigmoid** for the output, **mean squared error**, manually derived **backpropagation**, and **full-batch gradient descent**. It trains on the four XOR combinations for 5,000 epochs using learning rate **0.05** and reproducible random initialization (seed **42**).
+
+**Run the implementation:**
+
+```bash
+python -m pip install -r requirements.txt
+python examples/xor_network.py
+```
+
+| Input | Target | Model probability | Predicted class |
+| --- | ---: | ---: | ---: |
+| (0, 0) | 0 | 0.08389788 | 0 |
+| (0, 1) | 1 | 0.95051648 | 1 |
+| (1, 0) | 1 | 0.95173893 | 1 |
+| (1, 1) | 0 | 0.08393200 | 0 |
+
+**Final training MSE:** `0.00471529585312808` · **Accuracy on the four XOR training cases:** `4/4`.
+
+**Editable Excalidraw diagrams and vector exports:**
+
+- [Architecture](assets/xor/01-architecture.excalidraw) · [SVG](assets/xor/01-architecture.svg)
+- [Forward propagation](assets/xor/02-forward-pass.excalidraw) · [SVG](assets/xor/02-forward-pass.svg)
+- [Backpropagation](assets/xor/03-backpropagation.excalidraw) · [SVG](assets/xor/03-backpropagation.svg)
+
+This is a small educational demonstration, not a benchmark of generalization. The implementation has been tested on XOR, but complete numerical checking of all parameter gradients is deferred.
+
 ## Topics covered
 
 - Inputs, outputs, pixels, and input neurons
@@ -25,6 +57,7 @@ Personal notes and runnable Python examples for learning neural network fundamen
 | [notes/09-chain-rule-and-backpropagation-gradients.md](notes/09-chain-rule-and-backpropagation-gradients.md) | Chain rule derived twice, weight and bias gradients, worked neuron example and four linked diagrams |
 | [notes/10-output-layer-forward-backprop-and-update.md](notes/10-output-layer-forward-backprop-and-update.md) | 2→3→1 forward pass, separate output weights, four gradient derivations, output-bias derivative and gradient descent with diagrams |
 | [examples/output_layer_single_step.py](examples/output_layer_single_step.py) | Runnable NumPy one-example output-layer gradient and update checks |
+| [examples/xor_network.py](examples/xor_network.py) | Full 2→3→1 XOR network with manual backpropagation, 5000 epochs, and final classification |
 | [assets/lesson-10-output-layer](assets/lesson-10-output-layer) | Five vector diagrams with automated 3200px PNG exports |
 | [examples/train_batch_neuron_numpy.py](examples/train_batch_neuron_numpy.py) | Executable 4-example training loop with numeric checks |
 | [examples/relu_derivative_numpy.py](examples/relu_derivative_numpy.py) | Executable ReLU derivative with NumPy |
@@ -53,6 +86,7 @@ python examples/train_single_neuron.py
 python examples/train_batch_neuron_numpy.py
 python examples/relu_derivative_numpy.py
 python examples/output_layer_single_step.py
+python examples/xor_network.py
 ```
 
 ## Source
@@ -61,12 +95,8 @@ python examples/output_layer_single_step.py
 
 ## Current status
 
-**Checkpoint: 16 October 2026.** Single-example plain-Python training and vectorized **four-example, five-epoch full-batch NumPy training** are implemented. For x = [1,2,3,4], y = [5,10,15,20], w = 3, b = 1, and learning rate 0.05, dataset MSE falls from **21.0 to approximately 0.325768**.
+**18 October 2026:** The full 2 → 3 → 1 XOR network has been implemented, trained, and evaluated in NumPy. All four XOR training cases classify correctly. Weights use seeded random initialization. The loss starts near 0.25 and reaches **0.0047153** after 5,000 updates. See [the XOR implementation](examples/xor_network.py) and [architecture diagram](assets/xor/01-architecture.svg).
 
-**Activation derivatives and chain rule:** ReLU'(z) with a NumPy Boolean mask and .astype(float) is practiced. On **17 October**, the single-neuron chain rule **w -> z -> a -> L** and both weight/bias gradients were derived by hand. Hidden-layer gradients and XOR training remain next.
+**Historical learning checkpoints:** Earlier notes capture incremental work on single-neuron training, vectorized MSE, ReLU derivatives, the chain rule, and output-layer backpropagation. See [lesson 07](notes/07-vectorized-batch-gradient-descent.md), [lesson 08](notes/08-relu-derivative-and-chain-rule-intro.md), [lesson 09](notes/09-chain-rule-and-backpropagation-gradients.md), and [lesson 10](notes/10-output-layer-forward-backprop-and-update.md).
 
-**New checkpoint, 17 October:** Completed the mathematical derivation of gradients for all three **output-layer weights and output bias**, followed by one output-layer gradient descent update using fixed hidden activations. The sample's squared loss decreased from 0.04 to 0.0064. This is not full network training.
-
-**Not yet done:** updating hidden-layer weights by backpropagation or training the complete **2 -> 3 -> 1 XOR** network. Target around **20 October 2026**, based on understanding rather than a rigid deadline.
-
-For the precise batch training trace, see [lesson 07](notes/07-vectorized-batch-gradient-descent.md). For ReLU basics, see [lesson 08](notes/08-relu-derivative-and-chain-rule-intro.md). For weight/bias chain-rule derivation and diagrams, see [lesson 09](notes/09-chain-rule-and-backpropagation-gradients.md). For output-layer gradients and the full bias derivative, see [lesson 10](notes/10-output-layer-forward-backprop-and-update.md).
+**Next:** Publish a technical write-up. Numerical gradient checking is postponed for a separate follow-up.
