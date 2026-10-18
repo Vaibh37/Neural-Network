@@ -1,10 +1,10 @@
 # 09 — Chain Rule: From Forward Pass to Weight and Bias Gradients
 
-**Checkpoint: 17 October 2026.** One-neuron derivative calculations and the *reason* behind the multi-factor chain rule were practiced. This is **not** yet an implementation of multi-layer backpropagation or a trained XOR network.
+**Scope:** Single-neuron forward propagation, the chain rule, and weight/bias gradients. Multilayer backpropagation and XOR training are outside the scope of this note.
 
 ## Learning objective
 
-Derive (do not memorize) why:
+Derive the weight gradient for a single neuron:
 
 ```math
 \frac{\partial L}{\partial w} =
@@ -13,7 +13,7 @@ Derive (do not memorize) why:
 \cdot \frac{\partial z}{\partial w}
 ```
 
-The only new idea is to apply the familiar chain rule **twice**.
+This expression follows by applying the standard chain rule to two nested dependencies.
 
 ## 1. Forward propagation
 
@@ -47,7 +47,7 @@ L=(7-10)^2=9
 
 **Forward propagation calculates a prediction and its loss.** It does not update parameters.
 
-## 2. What derivative notation means
+## 2. Derivative notation
 
 Read $\partial L/\partial w$ as: **How does the loss change if the weight changes slightly while the other independent quantities are held fixed?**
 
@@ -57,7 +57,7 @@ Read $\partial L/\partial w$ as: **How does the loss change if the weight change
 
 A negative gradient means a small increase in the variable tends to **decrease** loss, locally. It is not an instruction to always increase that variable; the sign can change at a different point.
 
-## 3. Start with the chain rule you already know
+## 3. Deriving the extended chain rule
 
 For:
 
@@ -110,9 +110,9 @@ Substitute the second equation into the first:
 }
 ```
 
-Nothing new was invented for neural networks: this is ordinary differentiation through nested functions. For a bias gradient, replace the final factor with $\partial z/\partial b$.
+This is the standard chain rule applied to nested functions. For the bias gradient, replace the final factor with $\partial z/\partial b$.
 
-## 4. Actually differentiate each part
+## 4. Local derivatives
 
 ![Local derivative reference](../assets/chain-rule/local-derivatives.svg)
 
@@ -221,4 +221,4 @@ Both approaches agree. The multi-factor approach scales to deeper networks.
 | Final weight gradient | $\partial L/\partial w$ | -12 |
 | Final bias gradient | $\partial L/\partial b$ | -6 |
 
-**What's next:** turn these gradients into a parameter update, then generalize to matrices and the planned $2\to3\to1$ XOR network. **Do not mark the full network or hidden-layer backprop as complete yet.**
+**Next:** Apply the gradients in a parameter update, then extend the derivation to the planned $2\to3\to1$ XOR network. Hidden-layer backpropagation remains a separate learning milestone.
