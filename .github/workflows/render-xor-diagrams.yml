@@ -1,0 +1,46 @@
+name: Render XOR lesson diagrams to PNG
+
+on:
+  push:
+    paths:
+      - 'assets/xor/d*.svg'
+      - '.github/workflows/render-xor-diagrams.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Install SVG renderer
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+      - name: Render high-resolution 3200px PNG diagrams
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          diagrams=(assets/xor/d*.svg)
+          if (( ${#diagrams[@]} != 12 )); then
+            echo "Expected 12 XOR lesson SVG diagrams; found ${#diagrams[@]}"
+            exit 1
+          fi
+          for svg in "${diagrams[@]}"; do
+            rsvg-convert --keep-aspect-ratio --width 3200 --output "${svg%.svg}.png" "$svg"
+          done
+      - name: Commit generated PNG diagrams
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add assets/xor/d*.png
+          if git diff --cached --quiet; then
+            echo 'All PNG files are up to date'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "assets: render 12 high-resolution XOR lesson PNGs"
+          git push
