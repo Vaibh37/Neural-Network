@@ -196,7 +196,7 @@ With linear output and **single-example** squared loss, $L=(0.8-1)^2=0.04$.
 
 ### Output-layer backpropagation
 
-**Do not multiply the original functions together: multiply the local derivatives along the dependency path.**
+The chain rule multiplies the local derivatives along the dependency path, not the original expressions.
 
 ```math
 \frac{\partial L}{\partial\hat y}=2(\hat y-y)=-0.4
