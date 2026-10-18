@@ -1,10 +1,10 @@
 # 10 — Forward Pass and Output-Layer Backpropagation (17 October 2026)
 
-**Status:** Worked through a **2 → 3 → 1** network by hand. Calculated the output-layer weight and bias gradients, then performed one output-layer gradient-descent update. **Hidden-layer backpropagation and complete XOR training are not done yet.**
+**Scope:** A worked **2 → 3 → 1** network, including forward propagation, output-layer weight/bias gradients, and a single output-layer gradient-descent update. Hidden-layer backpropagation and full XOR training are beyond this example.
 
 **Prerequisite:** [Lesson 09 — Chain Rule and One-Neuron Gradients](09-chain-rule-and-backpropagation-gradients.md).
 
-## 1. Why are there new weights?
+## 1. Network architecture and trainable parameters
 
 A neural network has **a separate weight for each connection**. Each neuron has a bias too.
 
@@ -16,7 +16,7 @@ Our architecture:
 
 The hidden layer therefore has $2 \times 3=6$ weights and $3$ biases. The output layer has $3$ **new** weights and $1$ bias: **13 trainable parameters total**.
 
-The numerical weights in this lesson were **assigned manually to explain the computation**. A real training run initializes parameters, typically with a suitable random method, and updates them from gradients. We never copy the hidden-layer weights into the output layer.
+The numerical weights in this lesson were **assigned manually to explain the computation**. A real training run initializes parameters, typically with a suitable random method, and updates them from gradients. The output-layer weights are independent of the hidden-layer weights.
 
 ![Three-layer network with distinct connections](../assets/lesson-10-output-layer/01-network-architecture.svg)
 
@@ -159,7 +159,7 @@ Because $h_2=0$, changing $v_2$ has no effect on this example's prediction. **Th
 
 ### 4.4 Derivative with respect to the output bias — complete derivation
 
-**Do not skip the differentiation of the bias.**
+Differentiate the prediction with respect to the output bias, term by term.
 
 ```math
 \begin{aligned}
@@ -197,7 +197,7 @@ The derivative is not multiplied by $h_1,h_2,h_3$ or $x$ because **the derivativ
 | $v_3$ | 0.30 | -0.80 |
 | $b_{\mathrm{out}}$ | 0.00 | -0.40 |
 
-**Backpropagation only calculates these gradients. It does not update the weights or bias.**
+**Backpropagation computes gradients; the parameter update happens in the subsequent gradient-descent step.**
 
 ## 5. Gradient descent: use the gradients to update the parameters
 
