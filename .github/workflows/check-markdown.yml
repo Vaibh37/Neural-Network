@@ -1,0 +1,29 @@
+name: Validate Markdown documentation
+
+on:
+  push:
+    paths:
+      - 'notes/**'
+      - 'README.md'
+      - 'CHEATSHEET.md'
+      - 'scripts/check_markdown.py'
+      - '.github/workflows/check-markdown.yml'
+  pull_request:
+    paths:
+      - 'notes/**'
+      - 'README.md'
+      - 'CHEATSHEET.md'
+      - 'scripts/check_markdown.py'
+      - '.github/workflows/check-markdown.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Validate Markdown math and image links
+        run: python3 scripts/check_markdown.py
