@@ -51,7 +51,7 @@ z_3 &= 2x_1-1x_2+0 = 2(1)-1(0)=2
 Then apply **ReLU separately to each** weighted sum:
 
 ```math
-h_i=\operatorname{ReLU}(z_i)=\max(0,z_i)
+h_i=\mathrm{ReLU}(z_i)=\max(0,z_i)
 ```
 
 ```math
