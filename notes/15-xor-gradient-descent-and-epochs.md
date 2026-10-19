@@ -62,6 +62,6 @@ for epoch in range(epochs):
 - Placing the **entire training block inside that if** would train only on matching indices, which is wrong.
 - Initialization must stay **outside** the loop; otherwise every epoch restarts from the same initial parameters.
 
-The original direct implementation, with each derivative exposed, is preserved in [examples/xor_network.py](../examples/xor_network.py). It is intentionally not hidden behind a deep-learning framework or split into opaque helpers.
+The complete training loop is in [examples/xor_network.py](../examples/xor_network.py). Each gradient is calculated explicitly using NumPy.
 
 **Next:** [16 — random initialization and XOR evaluation](16-xor-random-initialization-and-results.md).
