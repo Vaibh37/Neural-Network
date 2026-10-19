@@ -70,10 +70,10 @@ predictions = (a_o_new >= 0.5).astype(int)
 
 This is a small educational fit to four known examples, **not** an independent test of generalization. All four rows used for evaluation are the same rows used in training.
 
-## Scope and remaining checks
+## What this run verifies
 
-The implementation's observed predictions and MSE have been reproduced with its seeded initialization. That confirms this particular training run behaves as reported, but it does **not** constitute a complete numerical gradient check of all 13 parameters.
+The seeded run reproduces the listed predictions and training MSE. The four evaluated examples are the training set, so this is not a test of generalization.
 
-Numerical gradient checking has been **postponed intentionally** rather than marked complete.
+The analytical gradients have not yet been compared against finite-difference estimates for all 13 parameters.
 
 **Code:** [examples/xor_network.py](../examples/xor_network.py) · **Diagrams:** [assets/xor](../assets/xor).
