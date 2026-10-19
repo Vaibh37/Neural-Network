@@ -1,232 +1,157 @@
-# Neural Network Fundamentals — Cheat Sheet
+# Neural Network Cheat Sheet
 
-**Checkpoint:** 16 October 2026. Single-example and four-example NumPy batch training practiced; ReLU derivative and chain rule introduced. Hidden-layer backpropagation remains upcoming.
+Equations and NumPy shapes used in the [XOR implementation](examples/xor_network.py). For worked derivations, see the [notes](notes/).
 
 ## One neuron
 
-```math
-z=w\cdot x+b,\quad a=f(z).
-```
+For inputs `x`, weights `w`, bias `b`, and activation `f`:
 
-- **x:** numeric input vector.
-- **w:** weights (one per input).
-- **b:** bias added to the weighted sum.
-- **z:** pre-activation value.
-- **a:** activated output sent to the next layer.
+~~~math
+z=w\cdot x+b,\qquad a=f(z)
+~~~
 
-For x = [2, 3], w = [1, -1], b = 1:
+- `z` is the weighted sum before activation.
+- `a` is the output after activation.
+- ReLU: `max(0, z)`.
+- Sigmoid: `1 / (1 + exp(-z))`.
+- ReLU derivative: 1 if `z > 0`, 0 if `z < 0`. At `z = 0`, the derivative is undefined; the implementation uses 0.
 
-z = (1 × 2) + (-1 × 3) + 1 = **0**. Sigmoid(0) = **0.5**.
+For a **linear** neuron (`a = wx + b`) with squared-error loss `L = (a - y)²`:
 
-## Dense layer (multiple neurons)
+~~~math
+\frac{\partial L}{\partial w}=2(a-y)x,\qquad
+\frac{\partial L}{\partial b}=2(a-y)
+~~~
 
-```math
-Z=WX+b,\qquad A=f(Z).
-```
+For a nonlinear activation, apply the chain rule through `a = f(z)` before finding the weight and bias gradients.
 
-With **one column input**, W:(3,2), x:(2,1), b:(3,1) gives Z:(3,1), A:(3,1).
+## XOR network: shapes
 
-With **s samples stored as columns**, X:(2,s), the same W and b give output A:(3,s). The bias is broadcast across sample columns.
+The code stores **one training example per row**. There are four examples (`N = 4`).
 
-| Operation | What it does |
-|---|---|
-| W @ X | Matrix product: row × column |
-| + b | Adds one bias per output neuron |
-| ReLU(Z) | max(0,z) for every entry |
-| sigmoid(Z) | 1 / (1 + e^(-z)) for every entry |
-| A | Activated outputs passed to the next layer |
+| Variable | Meaning | Shape |
+| --- | --- | --- |
+| `X` | Input batch | `(4, 2)` |
+| `y` | Targets | `(4, 1)` |
+| `W_h`, `b_h` | Hidden weights and biases | `(2, 3)`, `(3,)` |
+| `z_h`, `h` | Hidden pre-activations and ReLU outputs | `(4, 3)` |
+| `W_o`, `b_o` | Output weights and bias | `(3, 1)`, `(1,)` |
+| `z_o`, `a_o` | Output pre-activations and sigmoid outputs | `(4, 1)` |
+| `L` | Mean squared error | Scalar |
 
-**Warning:** An activated dense layer is often described as one neural-network layer even when code defines its linear operation and activation as separate modules. They are not inherently two groups of neurons.
+There are **13 parameters**: 6 hidden weights + 3 hidden biases + 3 output weights + 1 output bias.
 
-## Activation reference
+## Forward pass
 
-| Input | ReLU | Sigmoid (approx.) |
-|---:|---:|---:|
-| -5 | 0 | 0.0067 |
-| 0 | 0 | 0.5 |
-| 3 | 3 | 0.9526 |
-| 10 | 10 | 0.99995 |
+The hidden layer receives `X`:
 
-ReLU commonly appears in hidden layers; sigmoid can map a binary classifier logit to a number in (0,1). Not every sigmoid output is a calibrated probability.
+~~~math
+Z_h=XW_h+b_h,\qquad H=\mathrm{ReLU}(Z_h)
+~~~
 
-## Full practice example
+The output layer receives `H`:
 
-```math
-x=\begin{bmatrix}2\\-1\end{bmatrix},\quad
-W=\begin{bmatrix}2&1\\-1&3\\1&-2\end{bmatrix},\quad
-b=\begin{bmatrix}1\\2\\-3\end{bmatrix}.
-```
+~~~math
+Z_o=HW_o+b_o,\qquad A_o=\sigma(Z_o)
+~~~
 
-```math
-Z=Wx+b=\begin{bmatrix}4\\-3\\1\end{bmatrix},
-\quad
-A=\mathrm{ReLU}(Z)=\begin{bmatrix}4\\0\\1\end{bmatrix}.
-```
+~~~python
+z_h = X @ W_h + b_h
+h = np.maximum(0, z_h)
 
-Output shape: **(3,1)**. See [step-by-step lesson](notes/04-hidden-layer-forward-pass.md) and [runnable example](examples/hidden_layer_numpy.py).
+z_o = h @ W_o + b_o
+a_o = 1 / (1 + np.exp(-z_o))
+~~~
 
-## Training status
+## Loss
 
-A single linear neuron **has** been trained both on one example (plain Python) and on four examples (vectorized NumPy full-batch MSE). Backpropagation through hidden layers and a trained digit/XOR classifier **have not** been implemented. A hidden-layer forward pass alone is not training.
+With `N` examples and one output per example:
 
-## MSE and linear prediction — practiced 15 October 2026
+~~~math
+L=\frac{1}{N}\sum_{i=1}^{N}(a_o^{(i)}-y^{(i)})^2
+~~~
 
-- Prediction for one feature: `y_pred = w * x + b` (elementwise for a NumPy array of samples).
-- Squared error: `(y_pred - y_true) ** 2` (one error per sample).
-- Mean squared error: `np.mean((y_pred - y_true) ** 2)` (one scalar average).
-- MSE of **0** means perfect predictions on the evaluated examples; unlike accuracy, a larger value is worse.
-- In the practiced dataset `x=[1,2,3,4]`, `y_true=[20,40,60,80]`, `b=0`: at `w=10`, MSE **750**; at `w=15`, **187.5**. These weights were modified manually.
-- For one sample `x=4`, target `y=10`: `L(w,b) = (4w+b-10)^2`. This names a loss function that depends on `w` and `b`; it is **not** a product `L*w*b`.
-- Partial derivatives for that one-sample loss: `∂L/∂w = 8(4w+b-10)`, `∂L/∂b = 2(4w+b-10)`.
+~~~python
+loss = np.mean((a_o - y) ** 2)
+~~~
 
-Full explanation: [linear regression, loss and gradients](notes/05-linear-regression-loss-and-gradients.md). Runnable example: [prediction and loss only](examples/linear_regression_and_mse.py).
+## Backpropagation
 
-**Now done (16 October):** single-example training; four-example vectorized MSE gradients and a five-epoch batch loop. **Introduced:** ReLU derivative and chain rule through one activation. **Not done:** full XOR network, chain rule through multiple layers, or hidden-layer backpropagation.
+Find every gradient **before** updating any parameter.
 
+**1. Loss → sigmoid output → output weighted sum**
 
-## Single-example training equations (16 October)
+~~~math
+\frac{\partial L}{\partial A_o}=\frac{2}{N}(A_o-y)
+~~~
 
-For one example and a linear output:
+~~~math
+\frac{\partial L}{\partial Z_o}
+=\frac{\partial L}{\partial A_o}\odot A_o\odot(1-A_o)
+~~~
 
-```math
-\begin{aligned}
-\hat y&=wx+b, \quad L=(\hat y-y)^2,\\
-dw&=2(\hat y-y)x,\quad db=2(\hat y-y),\\
-w&\leftarrow w-\alpha\,dw,\quad b\leftarrow b-\alpha\,db.
-\end{aligned}
-```
-Repeat with **updated** w and b. A learning rate alpha is chosen and tested; too large can overshoot. Starting with x=2, y=10, w=3, b=1, alpha=0.05: prediction **7→8.5→9.25→9.625→9.8125→9.90625** and loss **9→2.25→0.5625→0.140625→0.03515625→0.0087890625**.
+~~~python
+dl_da_o = 2 / len(X) * (a_o - y)
+da_od_zo = a_o * (1 - a_o)
+dl_dz_o = dl_da_o * da_od_zo
+~~~
 
-See [full lesson](notes/06-first-gradient-descent-training-loop.md) and [runnable training loop](examples/train_single_neuron.py). **Do not confuse target (10), prediction (initially 7) and loss (initially 9).**
+The `2/N` factor is already included. Do not average the parameter gradients again.
 
+**2. Output parameters**
 
-## Full-batch NumPy training (16 October)
+~~~python
+dW_o = h.T @ dl_dz_o         # (3, 1)
+db_o = np.sum(dl_dz_o, axis=0)  # (1,)
+~~~
 
-Four samples but **one shared neuron** (one scalar weight w and bias b):
+**3. Output → hidden activations → hidden weighted sum**
 
-```python
-x = np.array([1.0, 2.0, 3.0, 4.0])
-y = np.array([5.0, 10.0, 15.0, 20.0])
-pred_y = w * x + b
-L = np.mean((pred_y - y) ** 2)  # Square first, THEN average
-dw = 2 * np.mean((pred_y - y) * x)
-db = 2 * np.mean(pred_y - y)
-w = w - learning_rate * dw
-b = b - learning_rate * db
-```
-- **w** is updated; **dw = ∂L/∂w** is the calculated *weight gradient*, not another weight or a second neuron.
-- **b** is updated with **db = ∂L/∂b**, not dw.
-- Each example contributes its own error and gradient. Average those contributions before one full-batch parameter update.
-- Initial: w = 3, b = 1, learning_rate = 0.05, initial MSE = **21.0**, first dw = **-25**, db = **-8**. After five updates MSE ≈ **0.325768**.
-- A gradient must be **recomputed every epoch** from current parameters.
+~~~math
+\frac{\partial L}{\partial H}
+=\frac{\partial L}{\partial Z_o}W_o^T
+~~~
 
-## ReLU derivative and local chain rule
+~~~python
+dl_dh = dl_dz_o @ W_o.T
+relu_mask = (z_h > 0).astype(float)
+dl_dzh = dl_dh * relu_mask
+~~~
 
-```math
-z=wx+b,\quad a=\mathrm{ReLU}(z),\quad L=(a-y)^2
-```
-```math
-\frac{\partial L}{\partial z}
-=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}
-=2(a-y)\mathrm{ReLU}'(z)
-```
-```python
-z = np.array([-3.0, 2.0, 0.0, 5.0])
-relu_prime = (z > 0).astype(float)  # [0., 1., 0., 1.]
-```
-ReLU'(z) is 0 for z < 0 and 1 for z > 0; at exactly 0 the derivative is undefined, and the code uses 0 by convention. For z = -3 and y = 2: a = 0, ∂L/∂a = -4, ∂a/∂z = 0, so ∂L/∂z = 0. **Hidden-layer backpropagation remains next.**
+The ReLU mask is elementwise; `W_o.T` is the **weight matrix transpose**, not the gradient transpose.
 
-Sources: [batch training lesson](notes/07-vectorized-batch-gradient-descent.md), [activation chain rule lesson](notes/08-relu-derivative-and-chain-rule-intro.md).
+**4. Hidden parameters**
 
+~~~python
+dW_h = X.T @ dl_dzh          # (2, 3)
+db_h = np.sum(dl_dzh, axis=0)  # (3,)
+~~~
 
-## One-neuron backpropagation and chain rule (17 October 2026)
+Summing with `axis=0` combines the four examples but keeps a separate bias gradient per neuron.
 
-**Practiced:** Differentiated the loss, ReLU activation, weighted sum, and combined those gradients using the chain rule. This is a mathematical derivation for one neuron, **not** completed training of the XOR network.
+## Gradient descent
 
-For $z=wx+b$, $a=\mathrm{ReLU}(z)$, and $L=(a-y)^2$:
+For each parameter `θ` with gradient `∂L/∂θ` and learning rate `α`:
 
-```math
-\frac{\partial L}{\partial w}
-=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}\frac{\partial z}{\partial w}
-```
+~~~math
+\theta_{\mathrm{new}}=\theta_{\mathrm{old}}-\alpha\frac{\partial L}{\partial\theta}
+~~~
 
-```math
-\frac{\partial L}{\partial b}
-=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}\frac{\partial z}{\partial b}
-```
+~~~python
+W_h -= A * dW_h
+b_h -= A * db_h
+W_o -= A * dW_o
+b_o -= A * db_o
+~~~
 
-| Local derivative | Result |
-| --- | --- |
-| $\partial L/\partial a$ | $2(a-y)$ |
-| $\partial a/\partial z$ | $1$ for $z>0$; $0$ for $z<0$; undefined at $z=0$ |
-| $\partial z/\partial w$ | $x$ |
-| $\partial z/\partial b$ | $1$ |
+The XOR script uses seed `42`, learning rate `0.05`, and `5,000` full-batch updates. The reported final MSE is about `0.004715`, with correct classifications for all four **training** examples. This is not a held-out evaluation. Numerical gradient checking has not yet been implemented.
 
-**Worked example:** $x=2,w=3,b=1,y=10$ gives $z=7,a=7,L=9$. Hence $\partial L/\partial w=(-6)(1)(2)=\mathbf{-12}$ and $\partial L/\partial b=(-6)(1)(1)=\mathbf{-6}$.
+## Worked lessons
 
-![Chain rule cheat sheet](assets/chain-rule/cheat-sheet.svg)
-
-Full derivation: [09 — Chain Rule and Backpropagation Gradients](notes/09-chain-rule-and-backpropagation-gradients.md).
-
-
-## Two inputs → three hidden neurons → one output (17 October 2026)
-
-**This is one worked XOR sample (x=[1,0], target y=1) using manually chosen weights.** Full hidden-layer training and XOR classification are not completed.
-
-### Hidden-layer forward pass
-
-A neuron with two inputs uses **two weights and one bias**, not the single-input equation wx+b alone:
-
-```math
-z_i = w_{i1}x_1+w_{i2}x_2+b_i,\qquad h_i=\mathrm{ReLU}(z_i)
-```
-With $W_{\mathrm{hidden}}=\begin{bmatrix}1&1\\-1&1\\2&-1\end{bmatrix}$, $x=[1,0]$, and zero hidden biases:
-
-```math
-z=[1,-1,2],\quad h=\mathrm{ReLU}(z)=[1,0,2]
-```
-### Output-layer forward pass
-
-New **independent** output weights $v=[0.2,0.4,0.3]$, and $b_{\mathrm{out}}=0$:
-
-```math
-\hat y=v_1h_1+v_2h_2+v_3h_3+b_{\mathrm{out}}=0.8
-```
-With linear output and **single-example** squared loss, $L=(0.8-1)^2=0.04$.
-
-### Output-layer backpropagation
-
-The chain rule multiplies the local derivatives along the dependency path, not the original expressions.
-
-```math
-\frac{\partial L}{\partial\hat y}=2(\hat y-y)=-0.4
-```
-```math
-\frac{\partial L}{\partial v_i}
-=\frac{\partial L}{\partial\hat y}\cdot\frac{\partial\hat y}{\partial v_i}
-=2(\hat y-y)h_i
-```
-```math
-\frac{\partial\hat y}{\partial b_{\mathrm{out}}}
-=\frac{\partial}{\partial b_{\mathrm{out}}}(v_1h_1+v_2h_2+v_3h_3+b_{\mathrm{out}})
-=0+0+0+1=1
-```
-```math
-\frac{\partial L}{\partial b_{\mathrm{out}}}
-=\frac{\partial L}{\partial\hat y}\cdot 1=-0.4
-```
-**Gradients:** $dv=[-0.4,0,-0.8]$, $db_{\mathrm{out}}=-0.4$. During backpropagation **parameters do not change**.
-
-### Gradient descent: update after calculating gradients
-
-With $\eta=0.05$, apply $\theta_{\mathrm{new}}=\theta-\eta\,\partial L/\partial\theta$:
-
-```math
-v_{\mathrm{new}}=[0.22,0.40,0.34],\quad b_{\mathrm{out,new}}=0.02
-```
-New prediction $0.92$; new loss $0.0064$ (**84% less loss on this one example**). Hidden-layer parameters were deliberately **not updated**.
-
-![Output gradient quick reference](assets/lesson-10-output-layer/05-quick-reference.svg)
-
-Full explanation: [Lesson 10 — output-layer forward and backpropagation](notes/10-output-layer-forward-backprop-and-update.md).
-Runnable NumPy check: [examples/output_layer_single_step.py](examples/output_layer_single_step.py).
+- [Single-neuron gradient descent](notes/06-first-gradient-descent-training-loop.md)
+- [Chain rule and parameter gradients](notes/09-chain-rule-and-backpropagation-gradients.md)
+- [XOR forward pass and MSE](notes/12-xor-vectorized-forward-and-loss.md)
+- [Output-layer backpropagation](notes/13-xor-output-layer-backprop.md)
+- [Hidden-layer backpropagation](notes/14-xor-hidden-layer-backprop.md)
+- [Training loop and parameter updates](notes/15-xor-gradient-descent-and-epochs.md)
+- [XOR diagrams](assets/xor/README.md)
