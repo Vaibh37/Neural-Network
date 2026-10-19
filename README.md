@@ -4,6 +4,8 @@ Personal notes and runnable Python examples for learning neural network fundamen
 
 **Start here:** [Run the XOR network](examples/xor_network.py) · [Read the step-by-step math](notes/11-xor-problem-and-architecture.md) · [Explore 12 editable diagrams](assets/xor/README.md) · [Companion ML-MATH repository](https://github.com/Vaibh37/ML-MATH)
 
+**Medium article:** [Building a Neural Network From Scratch: The Mathematics Behind Learning XOR](https://medium.com/@devvaibhav37/building-a-neural-network-from-scratch-the-mathematics-behind-learning-xor-10441e674a69)
+
 If this project helps you understand neural networks, consider **starring the repository**. Feedback, questions, and suggestions are welcome through [GitHub Issues](https://github.com/Vaibh37/Neural-Network/issues).
 
 ## XOR neural network from scratch — 18 October 2026
