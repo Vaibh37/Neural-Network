@@ -118,7 +118,17 @@ These match the notes. You can run any one of them from the repo root.
 | [`output_layer_single_step.py`](examples/output_layer_single_step.py) | One output layer backpropagation update |
 | [`xor_network.py`](examples/xor_network.py) | Full XOR training with hidden layer backpropagation |
 
-If you want to work through the scripts in order, start with `neuron.py` and `loss.py`, then move into the NumPy examples. `xor_network.py` is where everything comes together.
+If you're starting from the basics, run these in order:
+
+```bash
+python examples/neuron.py
+python examples/train_single_neuron.py
+python examples/train_batch_neuron_numpy.py
+python examples/output_layer_single_step.py
+python examples/xor_network.py
+```
+
+The first script only calculates an output. The next two show weight updates with one example and then a batch. The fourth works through an output layer update. The XOR script trains both layers.
 
 ## Diagrams
 
