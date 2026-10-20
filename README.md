@@ -122,13 +122,17 @@ If you're starting from the basics, run these in order:
 
 ```bash
 python examples/neuron.py
+python examples/loss.py
+python examples/hidden_layer_numpy.py
+python examples/linear_regression_and_mse.py
 python examples/train_single_neuron.py
 python examples/train_batch_neuron_numpy.py
+python examples/relu_derivative_numpy.py
 python examples/output_layer_single_step.py
 python examples/xor_network.py
 ```
 
-The first script only calculates an output. The next two show weight updates with one example and then a batch. The fourth works through an output layer update. The XOR script trains both layers.
+Start with a single forward pass and squared error. Then move to NumPy layers, weight updates, and the ReLU derivative. The last two scripts cover an output layer update and full XOR training.
 
 ## Diagrams
 
