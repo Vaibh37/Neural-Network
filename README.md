@@ -61,7 +61,17 @@ Correct predictions: **4/4**
 
 ![XOR loss curve](assets/xor/d11-loss-curve.svg)
 
-All four combinations are part of the training data. This shows the network learned this XOR dataset; it isn't a test on unseen data. I haven't added numerical gradient checking yet.
+All four combinations are part of the training data. This shows the network learned this XOR dataset; it isn't a test on unseen data.
+
+### Verify the backpropagation gradients
+
+To independently check the chain-rule calculations, run:
+
+```bash
+python scripts/check_xor_gradients.py
+```
+
+This compares all 13 analytical gradients against central finite differences on a small, fixed network. It uses nonzero ReLU inputs to avoid comparing derivatives at the ReLU corner. The same check runs automatically in GitHub Actions when the checker or its dependencies change.
 
 ## Notes
 
