@@ -13,6 +13,7 @@ Depends on what you're looking for:
 | Want to... | Open |
 | --- | --- |
 | Run the full XOR network | [`examples/xor_network.py`](examples/xor_network.py) |
+| Check the examples and training results | [Automated checks](#automated-checks) |
 | Understand the XOR architecture | [Lesson 11](notes/11-xor-problem-and-architecture.md) |
 | Follow the complete XOR maths | [Lessons 11 to 16](#xor-network-lessons-11-16) |
 | Start with basic neural networks | [Lesson 01](notes/01-fundamentals.md) |
@@ -72,6 +73,28 @@ python scripts/check_xor_gradients.py
 ```
 
 This compares all 13 analytical gradients against central finite differences on a small, fixed network. It uses nonzero ReLU inputs to avoid comparing derivatives at the ReLU corner. The same check runs automatically in GitHub Actions when the checker or its dependencies change.
+
+## Automated checks
+
+The examples are teaching scripts, so I also keep automated checks to catch accidental regressions. From the repository root, after installing `requirements.txt`:
+
+```bash
+python scripts/check_examples.py
+python scripts/check_xor_training.py
+python scripts/check_xor_gradients.py
+python scripts/check_markdown.py
+```
+
+| Check | What it verifies |
+| --- | --- |
+| [Example smoke tests](scripts/check_examples.py) | Runs all 9 educational Python examples separately, checking for exceptions, failed assertions, and timeouts. |
+| [XOR training regression](scripts/check_xor_training.py) | Repeats the seeded XOR training run; verifies output shapes, finite probabilities, all 4 training labels, and final MSE below 0.01. |
+| [Numerical gradient check](scripts/check_xor_gradients.py) | Compares the analytical backpropagation derivatives with finite differences for all 13 trainable parameters. |
+| [Markdown checks](scripts/check_markdown.py) | Checks documentation code fences, supported math formatting, and local image references. |
+
+GitHub Actions runs these checks automatically when the relevant files change. The [workflow definitions](.github/workflows) are included in the repository.
+
+**Scope:** The XOR check validates a deterministic training run on the four examples used to train the model. It does not measure performance on unseen data.
 
 ## Notes
 
