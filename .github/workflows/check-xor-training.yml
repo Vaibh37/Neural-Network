@@ -1,0 +1,29 @@
+name: Check seeded XOR training
+
+on:
+  push:
+    paths:
+      - 'examples/xor_network.py'
+      - 'scripts/check_xor_training.py'
+      - '.github/workflows/check-xor-training.yml'
+      - 'requirements.txt'
+  pull_request:
+    paths:
+      - 'examples/xor_network.py'
+      - 'scripts/check_xor_training.py'
+      - '.github/workflows/check-xor-training.yml'
+      - 'requirements.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  xor-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - run: python scripts/check_xor_training.py
